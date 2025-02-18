@@ -10,14 +10,18 @@ export class UsersService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  findUser() {}
+  findUser() {
+    return this.userRepository.find();
+  }
 
   createUser(userDeails: CreateUserParams) {
+    // user repository create is note a promise
     const newUser = this.userRepository.create({
       ...userDeails,
       createdAt: new Date(),
     });
 
+    // user repository save is a promise
     return this.userRepository.save(newUser);
   }
 }
