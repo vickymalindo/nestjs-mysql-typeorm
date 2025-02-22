@@ -12,30 +12,24 @@ import {
   Post,
   Put,
   Res,
+  SetMetadata,
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { CreateUserProfileDto } from './dtos/CreateUserProfile.dto';
-import { ResponseInterceptor } from 'src/interceptors/response.interceptor';
-import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
+import { ResponseInterceptor } from 'src/helpers/response.interceptor';
 import { Response } from 'express';
 
 @Controller('users')
-@UseInterceptors(ResponseInterceptor)
-@UseFilters(HttpExceptionFilter)
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get()
-  async getUsers(@Res() res: Response) {
-    const users = await this.userService.findUser();
-    return res.status(HttpStatus.CREATED).json({
-      data: users,
-      message: 'User list fetched successfully!',
-    });
-    return users;
+  @SetMetadata('responseMessage', 'successfully get users')
+  getUsers() {
+    return this.userService.findUser();
   }
 
   @Post()

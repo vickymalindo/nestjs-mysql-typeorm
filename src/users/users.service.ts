@@ -8,7 +8,7 @@ import {
   UpdateUserParams,
   CreateUserProfileParams,
   CreateUserPostParams,
-} from 'src/utils/types';
+} from 'src/utils/types.util';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -19,8 +19,16 @@ export class UsersService {
     @InjectRepository(Post) private postRepository: Repository<Post>,
   ) {}
 
-  findUser() {
-    return this.userRepository.find({ relations: ['profile', 'posts'] });
+  async findUser() {
+    const users = await this.userRepository.find({
+      relations: ['profile', 'posts'],
+    });
+
+    if (users.length === 0) {
+      throw new HttpException('Users Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    return users;
   }
 
   createUser(userDeails: CreateUserParams) {
