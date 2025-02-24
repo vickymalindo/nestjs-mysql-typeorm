@@ -5,22 +5,16 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Put,
-  Res,
   SetMetadata,
-  UseFilters,
-  UseInterceptors,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { CreateUserProfileDto } from './dtos/CreateUserProfile.dto';
-import { ResponseInterceptor } from 'src/helpers/response.interceptor';
-import { Response } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -33,7 +27,7 @@ export class UsersController {
   }
 
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto) {
+  createUser(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 

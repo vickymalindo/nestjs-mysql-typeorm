@@ -23,10 +23,6 @@ import { Post } from './typeorm/entities/Post';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    // { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },
-    // { provide: APP_FILTER, useClass: HttpExceptionFilter },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

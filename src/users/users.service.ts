@@ -10,6 +10,7 @@ import {
   CreateUserPostParams,
 } from 'src/utils/types.util';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -31,10 +32,13 @@ export class UsersService {
     return users;
   }
 
-  createUser(userDeails: CreateUserParams) {
-    // user repository create is note a promise
+  async createUser(userDeails: CreateUserParams) {
+    const hashedPassword = await bcrypt.hash(userDeails.password, 12);
+
+    // user repository create is not a promise
     const newUser = this.userRepository.create({
       ...userDeails,
+      password: hashedPassword,
       createdAt: new Date(),
     });
 
