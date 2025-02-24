@@ -2,6 +2,7 @@ import { CreateUserPostDto } from './dtos/CreateUserPost.dto';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -10,6 +11,7 @@ import {
   Post,
   Put,
   SetMetadata,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -21,6 +23,7 @@ export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get()
+  @UseInterceptors(ClassSerializerInterceptor)
   @SetMetadata('responseMessage', 'successfully get users')
   getUsers() {
     return this.userService.findUser();
