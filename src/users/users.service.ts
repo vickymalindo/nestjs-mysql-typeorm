@@ -11,6 +11,7 @@ import {
 } from 'src/utils/types.util';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { retry } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +21,7 @@ export class UsersService {
     @InjectRepository(Post) private postRepository: Repository<Post>,
   ) {}
 
-  async findUser() {
+  async findUsers() {
     const users = await this.userRepository.find({
       relations: ['profile', 'posts'],
     });
@@ -30,6 +31,20 @@ export class UsersService {
     }
 
     return users;
+  }
+
+  async findUserByUsername(username: string) {
+    const user = await this.userRepository.findOne({
+      where: {
+        username: username,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
   }
 
   async createUser(userDeails: CreateUserParams) {

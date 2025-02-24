@@ -11,22 +11,24 @@ import {
   Post,
   Put,
   SetMetadata,
+  UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { CreateUserProfileDto } from './dtos/CreateUserProfile.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get()
-  @UseInterceptors(ClassSerializerInterceptor)
   @SetMetadata('responseMessage', 'successfully get users')
   getUsers() {
-    return this.userService.findUser();
+    return this.userService.findUsers();
   }
 
   @Post()
@@ -42,6 +44,7 @@ export class UsersController {
     await this.userService.updateUser(id, updateUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.userService.deleteUser(id);
