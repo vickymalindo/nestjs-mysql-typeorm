@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { Profile } from './typeorm/entities/Profile';
 import { Post } from './typeorm/entities/Post';
 import { AuthModule } from './auth/auth.module';
+import { SecureHeaders } from './middleware/secureHeader.middleware';
 
 @Module({
   imports: [
@@ -27,4 +28,8 @@ import { AuthModule } from './auth/auth.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(SecureHeaders).forRoutes('*');
+  }
+}

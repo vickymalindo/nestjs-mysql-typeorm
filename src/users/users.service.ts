@@ -11,7 +11,6 @@ import {
 } from 'src/utils/types.util';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { retry } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -61,12 +60,30 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
-  updateUser(id: number, updateUserDetails: UpdateUserParams) {
-    return this.userRepository.update({ id }, { ...updateUserDetails });
+  async updateUser(updateUserDetails: UpdateUserParams) {
+    const username = updateUserDetails.username;
+    const updatedUser = await this.userRepository.update(
+      { username },
+      { password: updateUserDetails.password },
+    );
+
+    const { affected } = updatedUser;
+    if (!affected) {
+      throw new HttpException('failed update password', HttpStatus.BAD_REQUEST);
+    }
+
+    return {};
   }
 
-  deleteUser(id: number) {
-    return this.userRepository.delete({ id });
+  async deleteUser(id: number) {
+    const deletedUser = await this.userRepository.delete({ id });
+
+    const { affected } = deletedUser;
+    if (!affected) {
+      throw new HttpException('failed update password', HttpStatus.BAD_REQUEST);
+    }
+
+    return {};
   }
 
   async createUserProfile(
@@ -94,7 +111,7 @@ export class UsersService {
     const user = await this.userRepository.findOneBy({ id });
     if (!user)
       throw new HttpException(
-        'User not found. Cannot create Profile',
+        'User not found. Cannot create Post',
         HttpStatus.BAD_REQUEST,
       );
     const newPost = this.postRepository.create({

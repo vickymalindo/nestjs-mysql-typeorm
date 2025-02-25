@@ -32,10 +32,14 @@ export class User {
   @Column({ default: 'user' })
   role: string;
 
-  @OneToOne(() => Profile)
+  @OneToOne(() => Profile, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   profile: Profile;
 
-  @OneToMany(() => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.user, {
+    onDelete: 'CASCADE',
+  })
   posts: Post[];
 }
