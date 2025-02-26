@@ -57,7 +57,7 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
-  async updateUser(updateUserDetails: UpdateUserParams) {
+  async updatePassword(updateUserDetails: UpdateUserParams) {
     const username = updateUserDetails.username;
     const updatedUser = await this.userRepository.update(
       { username },
@@ -73,7 +73,15 @@ export class UsersService {
   }
 
   async deleteUser(id: number) {
+    const user = await this.userRepository.findBy({ id });
+
+    if (!user) {
+      throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
+    }
+
     const deletedUser = await this.userRepository.delete({ id });
+
+    console.log(deletedUser);
 
     const { affected } = deletedUser;
     if (!affected) {

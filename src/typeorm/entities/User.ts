@@ -35,7 +35,7 @@ export class User {
   role: string;
 
   @Index('idx_user_profile')
-  @OneToOne(() => Profile, {
+  @OneToOne(() => Profile, (profile) => profile.user, {
     onDelete: 'CASCADE',
   })
   @JoinColumn()

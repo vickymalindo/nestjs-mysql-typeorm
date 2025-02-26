@@ -4,8 +4,10 @@ import {
   Controller,
   Delete,
   Get,
+  ParseIntPipe,
   Post,
   Put,
+  Query,
   Req,
   SetMetadata,
   UseGuards,
@@ -57,13 +59,9 @@ export class ProfileController {
 
   @Delete()
   @UseGuards(RoleGuard)
-  @Roles('user')
+  @Roles('admin')
   @SetMetadata('responseMessage', 'successfully delete profile')
-  async deleteProfile(@Req() req: Request) {
-    const user = req['user'];
-
-    console.log(user);
-
-    return this.profileService.deleteProfile(user.id);
+  async deleteProfile(@Query('id', ParseIntPipe) id: number) {
+    return this.profileService.deleteProfile(id);
   }
 }

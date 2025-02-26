@@ -10,6 +10,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Req,
   SetMetadata,
   UseGuards,
@@ -20,6 +21,8 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { Public } from 'src/decorator/public.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { Roles } from 'src/decorator/role.decorator';
+import { RoleGuard } from 'src/guards/role.guard';
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -44,14 +47,17 @@ export class UsersController {
   @Public()
   @Put()
   @SetMetadata('responseMessage', 'successfully update password')
-  async updateUser(@Body(ValidationPipe) updateUserDto: UpdateUserDto) {
-    const updatedUser = await this.userService.updateUser(updateUserDto);
-    return updatedUser;
+  async updatePassword(@Body(ValidationPipe) updatePasswordDto: UpdateUserDto) {
+    const updatedPassword =
+      await this.userService.updatePassword(updatePasswordDto);
+    return updatedPassword;
   }
 
-  @Delete(':id')
+  @Delete()
+  @UseGuards(RoleGuard)
+  @Roles('admin')
   @SetMetadata('responseMessage', 'successfully delete user')
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+  async deleteUser(@Query('id', ParseIntPipe) id: number) {
     await this.userService.deleteUser(id);
   }
 

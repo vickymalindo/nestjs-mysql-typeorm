@@ -45,6 +45,12 @@ export class ProfileService {
   }
 
   async updateProfile(id: number, updateProfileDetails: ProfileParams) {
+    const profile = await this.profileRepository.findOne({ where: { id: id } });
+
+    if (!profile) {
+      throw new HttpException('Profile Not Found', HttpStatus.NOT_FOUND);
+    }
+
     const updatedProfile = await this.profileRepository.update(
       { id },
       { ...updateProfileDetails },
@@ -59,13 +65,17 @@ export class ProfileService {
   }
 
   async deleteProfile(id: number) {
-    const deletedProfile = await this.profileRepository.delete({ id });
+    const profile = await this.profileRepository.findOne({ where: { id: id } });
 
-    console.log(deletedProfile);
+    if (!profile) {
+      throw new HttpException('Profile Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    const deletedProfile = await this.profileRepository.delete({ id });
 
     const { affected } = deletedProfile;
     if (!affected) {
-      throw new HttpException('failed delete password', HttpStatus.BAD_REQUEST);
+      throw new HttpException('failed delete profile', HttpStatus.BAD_REQUEST);
     }
 
     return {};
