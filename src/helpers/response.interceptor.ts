@@ -31,7 +31,6 @@ export class ResponseInterceptor implements NestInterceptor {
         data,
       })),
       catchError((err) => {
-        console.log(err);
         const statusCode = err instanceof HttpException ? err.getStatus() : 500;
         const { response } = err;
         const message =

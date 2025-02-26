@@ -10,6 +10,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Req,
   SetMetadata,
   UseGuards,
   UseInterceptors,
@@ -17,9 +18,8 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
-import { CreateUserProfileDto } from './dtos/CreateUserProfile.dto';
 import { Public } from 'src/decorator/public.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -53,14 +53,6 @@ export class UsersController {
   @SetMetadata('responseMessage', 'successfully delete user')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.userService.deleteUser(id);
-  }
-
-  @Post(':id/profile')
-  createUserProfile(
-    @Param('id', ParseIntPipe) id: number,
-    @Body(ValidationPipe) createUserProfileDto: CreateUserProfileDto,
-  ) {
-    return this.userService.createUserProfile(id, createUserProfileDto);
   }
 
   @Post(':id/post')

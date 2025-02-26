@@ -1,12 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/typeorm/entities/Post';
-import { Profile } from 'src/typeorm/entities/Profile';
 import { User } from 'src/typeorm/entities/User';
 import {
   CreateUserParams,
   UpdateUserParams,
-  CreateUserProfileParams,
   CreateUserPostParams,
 } from 'src/utils/types.util';
 import { Repository } from 'typeorm';
@@ -16,7 +14,6 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Profile) private profileRepository: Repository<Profile>,
     @InjectRepository(Post) private postRepository: Repository<Post>,
   ) {}
 
@@ -80,28 +77,10 @@ export class UsersService {
 
     const { affected } = deletedUser;
     if (!affected) {
-      throw new HttpException('failed update password', HttpStatus.BAD_REQUEST);
+      throw new HttpException('failed delete password', HttpStatus.BAD_REQUEST);
     }
 
     return {};
-  }
-
-  async createUserProfile(
-    id: number,
-    createUserProfileDetails: CreateUserProfileParams,
-  ) {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) {
-      throw new HttpException(
-        'User not found. Cannot create Profile',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    const newProfile = this.profileRepository.create(createUserProfileDetails);
-    const savedProfile = await this.profileRepository.save(newProfile);
-    user.profile = savedProfile;
-    return this.userRepository.save(user);
   }
 
   async createUserPost(

@@ -8,6 +8,8 @@ import { Profile } from './typeorm/entities/Profile';
 import { Post } from './typeorm/entities/Post';
 import { AuthModule } from './auth/auth.module';
 import { SecureHeaders } from './middleware/secureHeader.middleware';
+import { PostModule } from './post/post.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { SecureHeaders } from './middleware/secureHeader.middleware';
     }),
     UsersModule,
     AuthModule,
+    PostModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
