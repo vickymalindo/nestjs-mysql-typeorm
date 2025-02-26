@@ -12,11 +12,11 @@ import { SecureHeaders } from './middleware/secureHeader.middleware';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
+      port: 5432,
+      username: 'postgres',
+      password: 'postgres',
       database: 'nestjs_mysql_typeorm',
       entities: [User, Profile, Post],
       // this for auto update table database
