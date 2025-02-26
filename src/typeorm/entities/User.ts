@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   OneToMany,
   OneToOne,
@@ -16,6 +17,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index('idx_firstname')
   @Column({ unique: true })
   username: string;
 
@@ -32,6 +34,7 @@ export class User {
   @Column({ default: 'user' })
   role: string;
 
+  @Index('idx_user_profile')
   @OneToOne(() => Profile, {
     onDelete: 'CASCADE',
   })

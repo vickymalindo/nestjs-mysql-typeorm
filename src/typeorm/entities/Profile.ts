@@ -1,4 +1,10 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './User';
 
 @Entity({ name: 'user_profiles' })
@@ -18,6 +24,7 @@ export class Profile {
   @Column({ type: 'date' })
   birthdate: string;
 
+  // @Index()
   @OneToOne(() => User, (user) => user.profile)
   user: User;
 }
