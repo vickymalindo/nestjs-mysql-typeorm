@@ -1,4 +1,3 @@
-import { CreateUserPostDto } from './dtos/CreateUserPost.dto';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import {
   Body,
@@ -6,12 +5,10 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   ParseIntPipe,
   Post,
   Put,
   Query,
-  Req,
   SetMetadata,
   UseGuards,
   UseInterceptors,
@@ -59,13 +56,5 @@ export class UsersController {
   @SetMetadata('responseMessage', 'successfully delete user')
   async deleteUser(@Query('id', ParseIntPipe) id: number) {
     await this.userService.deleteUser(id);
-  }
-
-  @Post(':id/post')
-  createUserPost(
-    @Param('id', ParseIntPipe) id: number,
-    @Body(ValidationPipe) createUserPostDto: CreateUserPostDto,
-  ) {
-    return this.userService.createUserPost(id, createUserPostDto);
   }
 }

@@ -15,7 +15,7 @@ export type ProfileParams = {
   birthdate: string;
 };
 
-export type CreateUserPostParams = {
+export type CreatePostParams = {
   title: string;
   description: string;
 };

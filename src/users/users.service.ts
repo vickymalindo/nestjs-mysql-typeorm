@@ -1,12 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from 'src/typeorm/entities/Post';
 import { User } from 'src/typeorm/entities/User';
-import {
-  CreateUserParams,
-  UpdateUserParams,
-  CreateUserPostParams,
-} from 'src/utils/types.util';
+import { CreateUserParams, UpdateUserParams } from 'src/utils/types.util';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -14,7 +9,6 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Post) private postRepository: Repository<Post>,
   ) {}
 
   async findUsers() {
@@ -81,30 +75,11 @@ export class UsersService {
 
     const deletedUser = await this.userRepository.delete({ id });
 
-    console.log(deletedUser);
-
     const { affected } = deletedUser;
     if (!affected) {
       throw new HttpException('failed delete password', HttpStatus.BAD_REQUEST);
     }
 
     return {};
-  }
-
-  async createUserPost(
-    id: number,
-    createUserPostDetails: CreateUserPostParams,
-  ) {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user)
-      throw new HttpException(
-        'User not found. Cannot create Post',
-        HttpStatus.BAD_REQUEST,
-      );
-    const newPost = this.postRepository.create({
-      ...createUserPostDetails,
-      user,
-    });
-    return this.postRepository.save(newPost);
   }
 }
