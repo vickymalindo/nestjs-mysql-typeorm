@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/typeorm/entities/Post';
 import { User } from 'src/typeorm/entities/User';
-import { CreatePostParams } from 'src/utils/types.util';
+import { PostParams } from 'src/utils/types.util';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -43,7 +43,7 @@ export class PostService {
     return res;
   }
 
-  async createPost(id: number, createUserPostDetails: CreatePostParams) {
+  async createPost(id: number, createPostDetails: PostParams) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user)
       throw new HttpException(
@@ -52,7 +52,7 @@ export class PostService {
       );
 
     const post = this.postRepository.create({
-      ...createUserPostDetails,
+      ...createPostDetails,
       user,
     });
 
@@ -61,5 +61,23 @@ export class PostService {
     }
 
     return this.postRepository.save(post);
+  }
+
+  async updatePost(id: number, updatePostDetail: PostParams) {
+    const post = await this.postRepository.findOneBy({ id });
+
+    if (!post) {
+      throw new HttpException('Post doesnt exist', HttpStatus.NOT_FOUND);
+    }
+
+    const updatedPost = await this.postRepository.update(id, updatePostDetail);
+
+    const { affected } = updatedPost;
+
+    if (!affected) {
+      throw new HttpException('Update post failed', HttpStatus.BAD_REQUEST);
+    }
+
+    return {};
   }
 }

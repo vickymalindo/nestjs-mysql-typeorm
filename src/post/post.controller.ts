@@ -3,11 +3,12 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   Req,
+  SetMetadata,
   UseGuards,
   UseInterceptors,
   ValidationPipe,
@@ -25,6 +26,7 @@ export class PostController {
   constructor(private postService: PostService) {}
 
   @Post()
+  @SetMetadata('responseMessage', 'successfully insert post')
   createPost(
     @Req() req: Request,
     @Body(ValidationPipe) createPostDto: CreatePostDto,
@@ -36,10 +38,20 @@ export class PostController {
 
   @Get()
   @Public()
+  @SetMetadata('responseMessage', 'successfully get posts')
   getPosts(
     @Query('page', ParseIntPipe) page: number,
     @Query('per_page', ParseIntPipe) perPage: number,
   ) {
     return this.postService.getPosts(page, perPage);
+  }
+
+  @Put()
+  @SetMetadata('responseMessage', 'successfully update post')
+  updatePost(
+    @Query('id', ParseIntPipe) id: number,
+    @Body(ValidationPipe) updatePostDto: CreatePostDto,
+  ) {
+    return this.postService.updatePost(id, updatePostDto);
   }
 }
