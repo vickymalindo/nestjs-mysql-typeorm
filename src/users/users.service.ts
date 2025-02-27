@@ -77,7 +77,7 @@ export class UsersService {
 
     const { affected } = deletedUser;
     if (!affected) {
-      throw new HttpException('failed delete password', HttpStatus.BAD_REQUEST);
+      throw new HttpException('failed delete user', HttpStatus.BAD_REQUEST);
     }
 
     return {};

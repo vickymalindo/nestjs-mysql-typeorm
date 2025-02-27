@@ -2,6 +2,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   ParseIntPipe,
   Post,
@@ -18,6 +19,8 @@ import { PostService } from './post.service';
 import { Request } from 'express';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Public } from 'src/decorator/public.decorator';
+import { RoleGuard } from 'src/guards/role.guard';
+import { Roles } from 'src/decorator/role.decorator';
 
 @Controller('post')
 @UseGuards(AuthGuard)
@@ -53,5 +56,13 @@ export class PostController {
     @Body(ValidationPipe) updatePostDto: CreatePostDto,
   ) {
     return this.postService.updatePost(id, updatePostDto);
+  }
+
+  @Delete()
+  @UseGuards(RoleGuard)
+  @Roles('admin')
+  @SetMetadata('responseMessage', 'successfully delete post')
+  async deleteProfile(@Query('id', ParseIntPipe) id: number) {
+    return this.postService.deletePost(id);
   }
 }

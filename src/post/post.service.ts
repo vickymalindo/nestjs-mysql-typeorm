@@ -80,4 +80,21 @@ export class PostService {
 
     return {};
   }
+
+  async deletePost(id: number) {
+    const post = await this.postRepository.findBy({ id });
+
+    if (!post) {
+      throw new HttpException('Post Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    const deletedPost = await this.postRepository.delete({ id });
+
+    const { affected } = deletedPost;
+    if (!affected) {
+      throw new HttpException('failed delete post', HttpStatus.BAD_REQUEST);
+    }
+
+    return {};
+  }
 }
