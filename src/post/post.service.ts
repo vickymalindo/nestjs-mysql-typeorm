@@ -45,6 +45,11 @@ export class PostService {
       return res;
     } catch (error) {
       this.logger.error('failed to get posts', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -73,6 +78,11 @@ export class PostService {
       return this.postRepository.save(post);
     } catch (error) {
       this.logger.error('failed to create post', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -102,6 +112,11 @@ export class PostService {
       return {};
     } catch (error) {
       this.logger.error('failed to update post', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -127,6 +142,11 @@ export class PostService {
       return {};
     } catch (error) {
       this.logger.error('failed to delete post', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,

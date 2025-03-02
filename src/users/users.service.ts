@@ -25,6 +25,11 @@ export class UsersService {
       return users;
     } catch (error) {
       this.logger.error('failed to get user', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -47,6 +52,11 @@ export class UsersService {
       return user;
     } catch (error) {
       this.logger.error('failed to get user', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -69,6 +79,11 @@ export class UsersService {
       return this.userRepository.save(newUser);
     } catch (error) {
       this.logger.error('failed to create user', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -95,6 +110,11 @@ export class UsersService {
       return {};
     } catch (error) {
       this.logger.error('failed to update user', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -120,6 +140,11 @@ export class UsersService {
       return {};
     } catch (error) {
       this.logger.error('failed to delete user', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,

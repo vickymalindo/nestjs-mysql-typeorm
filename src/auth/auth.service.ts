@@ -37,6 +37,11 @@ export class AuthService {
       return { access_token: access_token };
     } catch (error) {
       this.logger.error('failed to login', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,

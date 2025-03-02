@@ -29,6 +29,11 @@ export class ProfileService {
       return this.userRepository.save(user);
     } catch (error) {
       this.logger.error('failed to create profile', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -54,6 +59,11 @@ export class ProfileService {
       return profile;
     } catch (error) {
       this.logger.error('failed to get profile', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -87,6 +97,11 @@ export class ProfileService {
       return {};
     } catch (error) {
       this.logger.error('failed to update profile', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -117,6 +132,11 @@ export class ProfileService {
       return {};
     } catch (error) {
       this.logger.error('failed to delete profile', error.stack, error);
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
