@@ -17,7 +17,7 @@ import { AppLogger } from './middleware/appLogger.middleware';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'postgres_db',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
