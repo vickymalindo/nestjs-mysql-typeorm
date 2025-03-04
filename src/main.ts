@@ -5,6 +5,7 @@ import { WinstonModule } from 'nest-winston';
 import { instance } from './logger/logger.config';
 import { HttpExceptionFilter } from './helpers/exception.interceptor';
 import { ConfigService } from '@nestjs/config';
+import { runMigrations } from './migrations/migration-runner';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -17,6 +18,8 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   const configService = app.get(ConfigService);
   const port = configService.get<string>('APP_PORT') ?? 8000;
+
+  await runMigrations();
   await app.listen(port, () => {
     console.log(`Server running on port : ${port}`);
   });

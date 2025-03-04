@@ -9,6 +9,7 @@ services:
       - ./src:/app/src
     depends_on:
       - postgres_db
+
   postgres_db:
     image: postgres
     environment:

@@ -10,9 +10,9 @@ COPY . .
 # this will run npm install to make node_modules
 RUN npm install
 
-RUN npm run migration:run
-
 RUN npm run build
+
+RUN rm -rf db-data
 
 # this will make local machine fetch to the docker
 EXPOSE 3000
