@@ -10,27 +10,31 @@ import { AuthModule } from './auth/auth.module';
 import { SecureHeaders } from './middleware/secureHeader.middleware';
 import { PostModule } from './post/post.module';
 import { ProfileModule } from './profile/profile.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppLogger } from './middleware/appLogger.middleware';
+import { validate } from './config/env.validation';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'postgres_db',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'nestjs_mysql_typeorm',
-      entities: [User, Profile, Post],
-      // this for auto update table database
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        entities: [User, Profile, Post],
+        synchronize: false,
+      }),
+      inject: [ConfigService],
     }),
     UsersModule,
     AuthModule,
     PostModule,
     ProfileModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, validate }),
   ],
   controllers: [AppController],
   providers: [AppService],

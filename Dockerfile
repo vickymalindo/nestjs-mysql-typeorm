@@ -10,7 +10,7 @@ COPY . .
 # this will run npm install to make node_modules
 RUN npm install
 
-#
+# this will make local machine fetch to the docker
 EXPOSE 3000
 
 # this will run npm run start:dev
