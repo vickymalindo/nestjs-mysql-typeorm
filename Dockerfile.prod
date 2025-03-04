@@ -1,0 +1,21 @@
+# this will pull image node versin 22.x
+FROM node:22
+
+# this will make directory inside the docker
+WORKDIR /app
+
+# this will copy all file to /app
+COPY . .
+
+# this will run npm install to make node_modules
+RUN npm install
+
+RUN npm run migration:run
+
+RUN npm run build
+
+# this will make local machine fetch to the docker
+EXPOSE 3000
+
+# this will run npm run start:production
+CMD [ "npm", "run", "start:prod" ]

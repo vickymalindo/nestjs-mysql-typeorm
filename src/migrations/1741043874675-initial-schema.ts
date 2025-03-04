@@ -77,7 +77,7 @@ export class initialSchema1741043874675 implements MigrationInterface {
 
     // Drop foreign key constraint from 'user_profiles' table
     await queryRunner.query(`
-    ALTER TABLE "user_profiles" DROP CONSTRAINT "FK_user_profiles_userId"
+    ALTER TABLE "users" DROP CONSTRAINT "FK_users_profileId"
   `);
 
     // Drop index from 'user_posts' table
@@ -102,7 +102,11 @@ export class initialSchema1741043874675 implements MigrationInterface {
 
     // Drop index from 'users' table
     await queryRunner.query(`
-    DROP INDEX "idx_firstname"
+    DROP INDEX "idx_username"
+  `);
+
+    await queryRunner.query(`
+    DROP INDEX "idx_user_profile"
   `);
 
     // Drop 'users' table
